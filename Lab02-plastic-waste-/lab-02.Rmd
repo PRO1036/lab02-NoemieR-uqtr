@@ -1,0 +1,116 @@
+---
+title: "Lab 02 - Plastic waste"
+author: "Noémie Roy"
+date: "La date"
+output: github_document
+---
+
+## Chargement des packages et des données
+
+```{r load-packages, message=FALSE}
+library(tidyverse) 
+```
+
+```{r load-data, message=FALSE}
+plastic_waste <- read_csv("data/plastic-waste.csv")
+```
+
+Commençons par filtrer les données pour retirer le point représenté par Trinité et Tobago (TTO) qui est un outlier.
+
+```{r filter-data, message=FALSE}
+plastic_waste %>%
+  filter(plastic_waste_per_cap < 3.5)
+```
+
+
+## Exercices
+
+### Exercise 1
+
+```{r plastic-waste-continent}
+#
+ggplot(plastic_waste, aes(x = plastic_waste_per_cap)) +
+  geom_histogram(binwidth = 0.5, 
+                 shape = 1) +
+  labs(
+    x = "plastic_waste_per_cap",
+    y = "count",
+    title = "Distribution des quantité de déchets par habitant"
+  ) +
+  facet_wrap(~ continent, nrow = 3)
+```
+
+### Exercise 2
+
+```{r plastic-waste-density}
+#
+ggplot(plastic_waste, 
+       aes(x = plastic_waste_per_cap, fill = continent, color = continent)) + 
+  geom_density(adjust = 2,
+               alpha = 0.05)
+```
+
+Réponse à la question...
+
+### Exercise 3
+
+Boxplot:
+
+```{r plastic-waste-boxplot}
+# 
+ggplot(plastic_waste, 
+       aes(x = continent, y = plastic_waste_per_cap)) + 
+  geom_boxplot()
+```
+
+Violin plot:
+
+```{r plastic-waste-violin}
+#
+ggplot(plastic_waste, 
+       aes(x = continent, y = plastic_waste_per_cap)) + 
+  geom_violin()
+```
+
+Réponse à la question...
+
+### Exercise 4
+
+
+```{r plastic-waste-mismanaged}
+#
+ggplot(plastic_waste, 
+       aes(x = plastic_waste_per_cap, y = mismanaged_plastic_waste_per_cap, color = continent, size = total_pop)) +
+  geom_point()
+```
+
+Réponse à la question...
+
+### Exercise 5
+
+
+```{r plastic-waste-population-total}
+#
+ggplot(plastic_waste, 
+       aes(x = total_pop, y = plastic_waste_per_cap, 
+           fill = continent, color = continent)) +
+  geom_point()
+```
+
+```{r plastic-waste-population-coastal}
+#
+ggplot(plastic_waste, aes(x = coastal_pop)) +
+  geom_histogram(binwidth = 10000) +
+  labs(x = "coastal_pop",
+       y = "plastic_waste_per_cap")
+```
+
+Réponse à la question...
+
+## Conclusion
+
+Recréez la visualisation:
+
+```{r recreate-viz}
+# plastic_waste_coastal <- plastic_waste %>% mutate(coastal_pop_prop = coastal_pop / total_pop) %>% filter(plastic_waste_per_cap < 3)
+```
